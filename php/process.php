@@ -54,13 +54,12 @@ function processMessage($message) {
         logDebug("Text is: $text\n");
         
         
-        $user = UserDao::get($userId);
-        
-        if(null == $user){
-            $question = null;
-        }
-        else{
-            $question = QuestionDao::get($userId);
+        $user = UserDao::get($userId);        
+        $question = QuestionDao::get($userId);
+
+        if(null === $user || null === $question){
+            $question = new Question();
+            $question->round = CURRENT_ROUND_NUM;
         }
         
         $user = processUser($message, $user);
@@ -68,12 +67,20 @@ function processMessage($message) {
         
         processLang($user->lang);
         
+        print "Stage $user->stage<br>\n";
         switch($user->stage){
             case Stage::UNAUTHORIZED:
                 handleStageUnauthorized($user, $text);
                 break;
             case Stage::AUTHORIZED:
-                handleStageAuthorized($user, $questionService, $text);
+                handleStageAuthorized($user, $text);
+                break;
+            default:
+                handleSurveyEnded($user, $text);
+                break;
+                /*
+            case Stage::LANG:
+                handleStageLang($user, $questionService, $text);
                 break;
             case Stage::Q1:
                 handleStageQ1($user, $questionService, $text);
@@ -87,6 +94,42 @@ function processMessage($message) {
             case Stage::Q3:
                 handleStageQ3($user, $questionService, $text);
                 break;
+            case Stage::Q4:
+                handleStageQ4($user, $questionService, $text);
+                break;
+            case Stage::Q5:
+                handleStageQ5($user, $questionService, $text);
+                break;
+            case Stage::Q6:
+                handleStageQ6($user, $questionService, $text);
+                break;
+            case Stage::Q7:
+                handleStageQ7($user, $questionService, $text);
+                break;
+            case Stage::Q8:
+                handleStageQ8($user, $questionService, $text);
+                break;
+            case Stage::Q9:
+                handleStageQ9($user, $questionService, $text);
+                break;
+            case Stage::Q10:
+                handleStageQ10($user, $questionService, $text);
+                break;
+            case Stage::Q11:
+                handleStageQ11($user, $questionService, $text);
+                break;
+            case Stage::Q12:
+                handleStageQ12($user, $questionService, $text);
+                break;
+            case Stage::Q13:
+                handleStageQ13($user, $questionService, $text);
+                break;
+            case Stage::Q14:
+                handleStageQ14($user, $questionService, $text);
+                break;
+            case Stage::Q15:
+                handleStageQ15($user, $questionService, $text);
+                break;
             case Stage::RESTART:
                 handleStageRestart($user, $questionService, $text, $message_id);
                 break;
@@ -95,6 +138,7 @@ function processMessage($message) {
                 break;
             default:
                 break;
+                */
         }
     } else {
         apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'I understand only text messages'));

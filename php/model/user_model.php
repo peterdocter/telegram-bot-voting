@@ -9,6 +9,10 @@ class User{
     public $stage;
     public $lang;
     public $member_type;
+    public $voter2012;
+    public $is_voter;
+    public $age;
+    public $job;
     public $ip;
     public $create_date;
     public $last_modified_date;
@@ -22,18 +26,22 @@ class User{
     }
 
     function __construct1($array) {
-       $this->user_id = $array['user_id'];
-       $this->user_name = $array['user_name'];
-       $this->first_name = $array['first_name'];
-       $this->last_name = $array['last_name'];
-       $this->chat_id = $array['chat_id'];
-       $this->authorized = $array['authorized'];
-       $this->lang = $array['lang'];
-       $this->stage = $array['stage'];
-       $this->member_type = $array['member_type'];
-       $this->ip = $array['ip'];
-       $this->create_date = $array['create_date'];
-       $this->last_modified_date = $array['last_modified_date'];
+        $this->user_id = $array['user_id'];
+        $this->user_name = $array['user_name'];
+        $this->first_name = $array['first_name'];
+        $this->last_name = $array['last_name'];
+        $this->chat_id = $array['chat_id'];
+        $this->authorized = $array['authorized'];
+        $this->lang = $array['lang'];
+        $this->stage = $array['stage'];
+        $this->member_type = $array['member_type'];
+        $this->voter2012 = $array['voter2012'];
+        $this->is_voter = $array['is_voter'];
+        $this->age = $array['age'];
+        $this->job = $array['job'];
+        $this->ip = $array['ip'];
+        $this->create_date = $array['create_date'];
+        $this->last_modified_date = $array['last_modified_date'];
     }
     
     private function changeStage($newStage){
@@ -50,6 +58,10 @@ class User{
         return $this->changeStage(Stage::AUTHORIZED);
     }
     
+    public function changeStageToLang(){
+        return $this->changeStage(Stage::LANG);
+    }
+    
     public function changeStageToQ1(){
         return $this->changeStage(Stage::Q1);
     }
@@ -58,12 +70,56 @@ class User{
         return $this->changeStage(Stage::Q2);
     }
     
-    public function changeStageToQ2Confirm(){
-        return $this->changeStage(Stage::Q2_CONFIRM);
-    }
-    
     public function changeStageToQ3(){
         return $this->changeStage(Stage::Q3);
+    }
+    
+    public function changeStageToQ4(){
+        return $this->changeStage(Stage::Q4);
+    }
+    
+    public function changeStageToQ5(){
+        return $this->changeStage(Stage::Q5);
+    }
+    
+    public function changeStageToQ6(){
+        return $this->changeStage(Stage::Q6);
+    }
+    
+    public function changeStageToQ7(){
+        return $this->changeStage(Stage::Q7);
+    }
+    
+    public function changeStageToQ8(){
+        return $this->changeStage(Stage::Q8);
+    }
+    
+    public function changeStageToQ9(){
+        return $this->changeStage(Stage::Q9);
+    }
+    
+    public function changeStageToQ10(){
+        return $this->changeStage(Stage::Q10);
+    }
+    
+    public function changeStageToQ11(){
+        return $this->changeStage(Stage::Q11);
+    }
+    
+    public function changeStageToQ12(){
+        return $this->changeStage(Stage::Q12);
+    }
+    
+    public function changeStageToQ13(){
+        return $this->changeStage(Stage::Q13);
+    }
+    
+    public function changeStageToQ14(){
+        return $this->changeStage(Stage::Q14);
+    }
+    
+    public function changeStageToQ15(){
+        return $this->changeStage(Stage::Q15);
     }
     
     public function changeStageToRestart(){

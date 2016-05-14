@@ -1,5 +1,20 @@
 <?php
 
+function sendPhoto($chatID, $textMessage, $token, $notification = true) {
+    $url = "https://api.telegram.org/bot" . $token . "/sendPhoto?chat_id=" . $chatID;
+    $ch = curl_init(); 
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        "Content-Type:multipart/form-data"
+    ));
+    curl_setopt($ch, CURLOPT_URL, $url); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+    curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+        "photo"     => "@/votsonar/". $imageName, 
+    )); 
+    curl_setopt($ch, CURLOPT_INFILESIZE, filesize("image/". $imageName));
+    $output = curl_exec($ch);
+}
+
 function sendMessage($chatID, $textMessage, $token, $notification = true) {
 
     $url = "https://api.telegram.org/bot" . $token . "/sendMessage?chat_id=" . $chatID;

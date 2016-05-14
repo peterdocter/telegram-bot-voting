@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>    
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Testing Pie Chart</title>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?2.1.3"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?2.1.3"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?2.1.3"></script>
+
+    <style type="text/css">
+    text.pieText {
+      font-family: sans-serif;
+      font-size: 18px;
+      opacity: 0;
+      
+    }
+    .legend {
+      padding: 5px;
+      font: 15px sans-serif;
+    }    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+//Width and height
+      var w = 500;
+      var h = 700;
+
+      d3.json("informal2.json", function(json) {
+
+      var dataset = json.items;
+      var data = [];
+      dataset.forEach(function(elem) {
+        data.push(elem.val);
+      });
+      console.log(data);
+
+
+      var outerRadius = 300 / 2;
+      var innerRadius = 0;
+      var arc = d3.svg.arc()
+      .innerRadius(innerRadius)
+      .outerRadius(outerRadius);
+
+      var pie = d3.layout.pie();
+
+      //Easy colors accessible via a 10-step ordinal scale
+      var color = d3.scale.category10();
+
+      //Create SVG element
+      var outer = d3.select("body")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h);
+
+      svg = outer.append('g').attr('transform', 'translate(30, 30)');
+
+      //Set up groups
+      var arcs = svg.selectAll("g.arc")
+      .data(pie(data))
+      .enter()
+      .append("g")
+      .attr("class", "arc")
+      .attr('name', function(d, i) {
+        return dataset[i].name;
+      })
+      .attr("transform", "translate(" + parseInt(outerRadius + 30, 10) + "," +
+        parseInt(outerRadius + 30, 10) + ")")
+      // Change text style on mouseover
+      .on('mouseover', function(d, i) {
+        d3.select('text[name="'+ dataset[i].name +'"]').style('opacity', '1');
+      })
+      .on('mouseout', function(d, i) {
+        d3.select('text[name="'+ dataset[i].name +'"]').style('opacity', '0');
+      });
+
+      //Draw arc paths
+      arcs.append("path")
+      .attr("fill", function(d, i) {
+        return color(i);
+      })
+      .attr("d", arc);
+
+      // Data value in the pie chart
+      arcs.append("text")
+      .attr('class', 'pieText')
+      .attr("transform", function(d) {
+          var c = arc.centroid(d),
+            x = c[0],
+            y = c[1],
+            h = Math.sqrt(x*x + y*y);
+            console.log(c);
+          return "translate(" + (x/h * (outerRadius+10)) +  ',' +
+            (y/h * (outerRadius+10)) +  ")";
+        })
+      .attr("text-anchor", function(d) {
+        return (d.endAngle + d.startAngle)/2 > Math.PI ?
+            "end" : "start";
+      }).
+      attr('name',  function(d, i) {
+        return dataset[i].name;
+      })
+      .style('stroke', 'black')
+      .text(function(d, i) {
+        return dataset[i].name+ ': '+  d.value+ '%';
+        //return [dataset[i].name, d.value].join(': ');
+      });
+
+      // Legend
+      var legend = outer.append('g')
+      .attr('class', 'legend')
+      .attr('height', 100)
+      .attr('width', 100);
+
+      // Legend Rectangle
+      legend.selectAll('rect')
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('x', function(d, i) {
+        return i * 80 + 60;
+      })
+      .attr('y', 400)
+      .attr('width', 10)
+      .attr('height', 10)
+      .attr("fill", function(d, i) {
+        return color(i);
+      });
+
+      // Legend Text
+      legend.selectAll('text')
+        .data(data)
+        .enter()
+        .append('text')
+        .attr('x', function(d, i) {
+          return i * 80 + 85;
+        })
+        .attr('y', 400)
+        .attr('dy', 10)
+        .style('stroke', 'black')
+        .text(function(d, i) {
+          return dataset[i].name;
+        });
+
+      });        
+    </script>
+  </body>
+</html>

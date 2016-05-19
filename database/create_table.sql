@@ -88,8 +88,9 @@ create table bulk (
 create table media_content (
     bulk_id int not null,
     lang varchar(2) not null default '*', -- * means all languages
+    sequence int not null default 1, -- control sending sequence
     media_type int(1) not null default 1,
-        -- 1=Text Message, 2=Photo, 3=Audio, 4=Document, 5=Sticker, 6=Video, 7=Voice, 8=Venue, 9=Contact, 10=ChatAction
+        -- 1=Text Message, 2=Reserved, 3=Photo, 4=Audio, 5=Document, 6=Sticker, 7=Video, 8=Voice, 9=Venue, 10=Contact, 11=ChatAction
         -- Please don't declare multiple type in same bulk_id
     media_content varchar(5000),
     media_status int not null default 1,
@@ -99,6 +100,18 @@ create table media_content (
         --      APPROVED - Available for bulk sending
         --      DISABLED - Bulk sending job will ignore the record, any status can change to DISABLED
         -- Media Lifecycle: INIT --> SAMPLE --> APPROVED
-  primary key (bulk_id, lang)
+  PRIMARY KEY (`bulk_id`,`lang`, `sequence`)
 );
+
+create table system_content (
+    content_id int(9) not null,
+    content_version int not null default 0,
+    content_type varchar(30) not null,
+    content_name varchar(30) not null,
+    content_value int(11) not null,
+    content_tc varchar(800),
+    content_en varchar(800),
+  PRIMARY KEY (`content_id`)
+);
+
 
